@@ -15,6 +15,7 @@ public class WeatherForecastController : ControllerBase
         "Vinnytsia Oblast", "Luhansk Oblast", "Zakarpattia Oblast", "Kyiv Oblast", "Mykolaiv Oblast", "Rivne Oblast", "Kharkiv Oblast", "Zhytomyr Oblast", "Chernivtsi Oblast", "Odessa Oblast"
     };
 
+
     private readonly ILogger<WeatherForecastController> _logger;
 
     public WeatherForecastController(ILogger<WeatherForecastController> logger)
@@ -26,14 +27,12 @@ public class WeatherForecastController : ControllerBase
     public IEnumerable<WeatherForecast> Get()
     {
         return Enumerable.Range(0, 10).Select(index => new WeatherForecast
-            {
-                Country = "Ukraine",
-                Region = Regions[index],
-                Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                TemperatureC = Random.Shared.Next(-20, 55),
-                Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-            });
+        {
+            Country = "Ukraine",
+            Region = Regions[index],
+            Date = DateOnly.FromDateTime(DateTime.Now),
+            TemperatureC = Random.Shared.Next(-20, 55),
+            Summary = Summaries[Random.Shared.Next(Summaries.Length)]
+        });
     }
-    
-    
 }
