@@ -12,7 +12,22 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="documentation" />
+      <Content Include="..\documentation\WeatherForecast.postman_collection.json">
+        <Link>documentation\documentation\WeatherForecast.postman_collection.json</Link>
+      </Content>
+      <Content Remove="documentation\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Remove="documentation\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Remove="documentation\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="documentation\**" />
     </ItemGroup>
 
 </Project>
