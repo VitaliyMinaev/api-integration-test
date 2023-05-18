@@ -1,6 +1,7 @@
 using FluentValidation;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Polly;
 using Refit;
 using WeatherForecast.Console.Contracts.Api;
 using WeatherForecast.Console.Options;
@@ -24,6 +25,12 @@ public class Startup
         Configuration.GetSection(ApiOptions.Section).Bind(options);
 
         services.AddRefitClient<IWeatherForecastApi>()
+            .AddTransientHttpErrorPolicy(builder => builder.WaitAndRetryAsync(new []
+            {
+                TimeSpan.FromSeconds(1), 
+                TimeSpan.FromSeconds(3), 
+                TimeSpan.FromSeconds(6)
+            }))
             .ConfigureHttpClient(client =>
             {
                 client.BaseAddress = new Uri(options.Url);
