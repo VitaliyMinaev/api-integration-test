@@ -1,4 +1,5 @@
 using CommandLine;
+using WeatherForecast.Console.Domain;
 using WeatherForecast.Console.Output;
 using WeatherForecast.Console.Services;
 
@@ -20,7 +21,8 @@ public class WeatherForecastSearchApplication
             .ParseArguments<WeatherForecastSearchAppOptions>(args)
             .WithParsedAsync<WeatherForecastSearchAppOptions>(async (option) =>
             {
-                var forecastResult = await _weatherForecastSearchService.GetForecastAsync(option.Region);
+                var request = new ForecastSearchRequest(option.Region);
+                var forecastResult = await _weatherForecastSearchService.GetForecastAsync(request);
                 if (forecastResult.IsSuccess)
                 {
                     _consoleWriter.WriteLine($"Founded next forecast: {forecastResult.Value}");
@@ -29,7 +31,7 @@ public class WeatherForecastSearchApplication
                 {
                     foreach (var error in forecastResult.Errors)
                     {
-                        _consoleWriter.WriteLine($"{error.Reasons.FirstOrDefault()}: {error.Message}");
+                        _consoleWriter.WriteLine($"{error.Message}");
                     }
                 }
             });

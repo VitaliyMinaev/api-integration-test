@@ -1,3 +1,4 @@
+using FluentValidation;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Refit;
@@ -5,6 +6,7 @@ using WeatherForecast.Console.Contracts.Api;
 using WeatherForecast.Console.Options;
 using WeatherForecast.Console.Output;
 using WeatherForecast.Console.Services;
+using WeatherForecast.Console.Validators;
 
 namespace WeatherForecast.Console;
 
@@ -28,7 +30,7 @@ public class Startup
             });
         
         services.AddTransient<IWeatherForecastSearchService, WeatherForecastSearchService>();
-        
+        services.AddValidatorsFromAssemblyContaining<ForecastSearchRequestValidator>();
         services.AddSingleton<IConsoleWriter, ConsoleWriter>();
         services.AddSingleton<WeatherForecastSearchApplication>();
     }

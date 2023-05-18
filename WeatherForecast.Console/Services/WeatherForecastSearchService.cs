@@ -1,24 +1,34 @@
 using FluentResults;
+using FluentValidation;
 using Refit;
 using WeatherForecast.Console.Contracts.Api;
 using WeatherForecast.Console.Contracts.Responses;
+using WeatherForecast.Console.Domain;
 
 namespace WeatherForecast.Console.Services;
 
 public class WeatherForecastSearchService : IWeatherForecastSearchService
 {
     private readonly IWeatherForecastApi _api;
-    
-    public WeatherForecastSearchService(IWeatherForecastApi api)
+    private readonly IValidator<ForecastSearchRequest> _validator;
+
+    public WeatherForecastSearchService(IWeatherForecastApi api, IValidator<ForecastSearchRequest> validator)
     {
         _api = api;
+        _validator = validator;
     }
 
-    public async Task<Result<Forecast>> GetForecastAsync(string region)
+    public async Task<Result<Forecast>> GetForecastAsync(ForecastSearchRequest request)
     {
         try
         {
-            var weatherForecast = await _api.GetByRegionAsync(region);
+            var validationResult = await _validator.ValidateAsync(request);
+            if (validationResult.IsValid == false)
+            {
+                return Result.Fail(validationResult.Errors.Select(x => new Error(x.ErrorMessage)));
+            }
+            
+            var weatherForecast = await _api.GetByRegionAsync(request.Region);
             return Result.Ok(weatherForecast);
         }
         catch (ValidationApiException e)
