@@ -8,6 +8,6 @@ public class HealthCheckController : ControllerBase
     [HttpGet]
     public IActionResult HealthCheck()
     {
-        return Ok("Service are online!");
+        return Ok("Service is online!");
     }
 }
