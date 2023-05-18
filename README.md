@@ -18,7 +18,7 @@ docker run --name weather-forecast-api -d -p 8080:80 weather-forecast
 Alternatively, you can download image from <code>dockerhub</code> by using command: 
 
 ```console
-docker image pull vitaliiminaev/weather-forecast:v1
+docker image pull vitaliiminaev/weather-forecast:v2
 ```
 
 
