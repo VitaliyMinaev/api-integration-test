@@ -1,5 +1,4 @@
 using CommandLine;
-using WeatherForecast.Console.Contracts.Api;
 using WeatherForecast.Console.Output;
 using WeatherForecast.Console.Services;
 
