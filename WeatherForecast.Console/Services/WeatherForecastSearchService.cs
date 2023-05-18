@@ -35,7 +35,7 @@ public class WeatherForecastSearchService : IWeatherForecastSearchService
         {
             return Result.Fail(new Error(e.Message, new Error(nameof(ValidationApiException))));
         }
-        catch (Exception e)
+        catch (Exception)
         {
             throw;
         }
