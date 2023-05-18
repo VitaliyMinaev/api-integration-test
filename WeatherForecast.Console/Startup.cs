@@ -4,6 +4,7 @@ using Refit;
 using WeatherForecast.Console.Contracts.Api;
 using WeatherForecast.Console.Options;
 using WeatherForecast.Console.Output;
+using WeatherForecast.Console.Services;
 
 namespace WeatherForecast.Console;
 
@@ -25,7 +26,9 @@ public class Startup
             {
                 client.BaseAddress = new Uri(options.Url);
             });
-
+        
+        services.AddTransient<IWeatherForecastSearchService, WeatherForecastSearchService>();
+        
         services.AddSingleton<IConsoleWriter, ConsoleWriter>();
         services.AddSingleton<WeatherForecastSearchApplication>();
     }

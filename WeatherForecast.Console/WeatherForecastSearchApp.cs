@@ -1,27 +1,38 @@
 using CommandLine;
 using WeatherForecast.Console.Contracts.Api;
 using WeatherForecast.Console.Output;
+using WeatherForecast.Console.Services;
 
 namespace WeatherForecast.Console;
 
 public class WeatherForecastSearchApplication
 {
-    private readonly IWeatherForecastApi _api;
     private readonly IConsoleWriter _consoleWriter;
-    public WeatherForecastSearchApplication(IWeatherForecastApi api, IConsoleWriter consoleWriter)
+    private readonly IWeatherForecastSearchService _weatherForecastSearchService;
+    public WeatherForecastSearchApplication(IConsoleWriter consoleWriter, IWeatherForecastSearchService weatherForecastSearchService)
     {
-        _api = api;
         _consoleWriter = consoleWriter;
+        _weatherForecastSearchService = weatherForecastSearchService;
     }
 
     public async Task RunAsync(string[] args)
     {
         await Parser.Default
             .ParseArguments<WeatherForecastSearchAppOptions>(args)
-            .WithParsedAsync<WeatherForecastSearchAppOptions>((option) =>
+            .WithParsedAsync<WeatherForecastSearchAppOptions>(async (option) =>
             {
-                _consoleWriter.WriteLine($"The region was: {option.Region}");
-                return Task.CompletedTask;
+                var forecastResult = await _weatherForecastSearchService.GetForecastAsync(option.Region);
+                if (forecastResult.IsSuccess)
+                {
+                    _consoleWriter.WriteLine($"Founded next forecast: {forecastResult.Value}");
+                }
+                else
+                {
+                    foreach (var error in forecastResult.Errors)
+                    {
+                        _consoleWriter.WriteLine($"{error.Reasons.FirstOrDefault()}: {error.Message}");
+                    }
+                }
             });
     }
 }
