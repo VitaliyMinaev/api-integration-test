@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Refit;
 using WeatherForecast.Console.Contracts.Api;
 using WeatherForecast.Console.Options;
+using WeatherForecast.Console.Output;
 
 namespace WeatherForecast.Console;
 
@@ -24,7 +25,8 @@ public class Startup
             {
                 client.BaseAddress = new Uri(options.Url);
             });
-        
+
+        services.AddSingleton<IConsoleWriter, ConsoleWriter>();
         services.AddSingleton<WeatherForecastSearchApplication>();
     }
 
